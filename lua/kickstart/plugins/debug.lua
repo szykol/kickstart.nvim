@@ -99,6 +99,28 @@ return {
         -- On Windows delve must be run attached or it crashes.
         -- See https://github.com/leoluz/nvim-dap-go/blob/main/README.md#configuring
         detached = vim.fn.has 'win32' == 0,
+      }
+    }
+
+    dap.adapters.mix_task = {
+      type = 'executable',
+      command = '/Users/szykol/.local/share/nvim/mason/bin/elixir-ls-debugger', -- debugger.bat for windows
+      args = {},
+    }
+
+    dap.configurations.elixir = {
+      {
+        type = 'mix_task',
+        name = 'mix test',
+        task = 'test',
+        taskArgs = { '--trace' },
+        request = 'launch',
+        -- startApps = true, -- for Phoenix projects
+        projectDir = '${workspaceFolder}',
+        requireFiles = {
+          'test/**/test_helper.exs',
+          'test/**/*_test.exs',
+        },
       },
     }
   end,
