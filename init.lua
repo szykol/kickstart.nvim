@@ -254,12 +254,22 @@ require('lazy').setup({
     'lewis6991/gitsigns.nvim',
     opts = {
       signs = {
-        add = { text = '+' },
-        change = { text = '~' },
+        add = { text = '┃' },
+        change = { text = '┃' },
         delete = { text = '_' },
         topdelete = { text = '‾' },
         changedelete = { text = '~' },
+        untracked = { text = '┆' },
       },
+      signs_staged = {
+        add = { text = '┃' },
+        change = { text = '┃' },
+        delete = { text = '_' },
+        topdelete = { text = '‾' },
+        changedelete = { text = '~' },
+        untracked = { text = '┆' },
+      },
+      signs_staged_enable = true,
     },
   },
 
@@ -733,7 +743,7 @@ require('lazy').setup({
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true, python = true }
+        local disable_filetypes = { c = true, cpp = true }
         local lsp_format_opt
         if disable_filetypes[vim.bo[bufnr].filetype] then
           lsp_format_opt = 'never'
@@ -751,7 +761,7 @@ require('lazy').setup({
         go = { 'gofumpt', 'gci' },
         elixir = { 'mix' },
         -- Conform can also run multiple formatters sequentially
-        -- python = { 'isort', 'black' },
+        python = { 'ruff_format' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
@@ -915,9 +925,9 @@ require('lazy').setup({
     lazy = false, -- make sure we load this during startup if it is your main colorscheme
     priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
-      require('github-theme').setup {}
-
-      vim.cmd 'colorscheme github_dark_high_contrast'
+      -- require('github-theme').setup {}
+      --
+      -- vim.cmd 'colorscheme github_dark_high_contrast'
     end,
   },
 
@@ -931,40 +941,43 @@ require('lazy').setup({
     priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
       -- Load the colorscheme here
-      -- vim.cmd.colorscheme 'catppuccin'
-      -- -- vim.cmd.colorscheme 'catppuccin-latte'
+      vim.cmd.colorscheme 'catppuccin-mocha'
+      -- vim.cmd.colorscheme 'catppuccin-latte'
       --
       -- -- You can configure highlights by doing something like:
       -- vim.cmd.hi 'Comment gui=none'
       --
-      -- require('catppuccin').setup {
-      --   custom_highlights = function(colors)
-      --     local higlights = {
-      --       CursorLineNR = { fg = '#f2cdcd' },
-      --       MiniStatuslineDevinfo = { fg = colors.subtext1, bg = colors.surface1 },
-      --       MiniStatuslineFileinfo = { fg = colors.subtext1, bg = colors.surface1 },
-      --       MiniStatuslineFilename = { fg = colors.text, bg = colors.mantle },
-      --       MiniStatuslineInactive = { fg = colors.blue, bg = colors.mantle },
-      --       MiniStatuslineModeCommand = { fg = colors.base, bg = colors.peach, style = { 'bold' } },
-      --       MiniStatuslineModeInsert = { fg = colors.base, bg = colors.green, style = { 'bold' } },
-      --       MiniStatuslineModeNormal = { fg = colors.mantle, bg = colors.blue, style = { 'bold' } },
-      --       MiniStatuslineModeOther = { fg = colors.base, bg = colors.teal, style = { 'bold' } },
-      --       MiniStatuslineModeReplace = { fg = colors.base, bg = colors.red, style = { 'bold' } },
-      --       MiniStatuslineModeVisual = { fg = colors.base, bg = colors.mauve, style = { 'bold' } },
-      --     }
-      --     for key, value in pairs(higlights) do
-      --       local option = {
-      --         fg = value.fg,
-      --         bg = value.bg,
-      --       }
-      --       for _, style in ipairs(value.style or {}) do
-      --         option[style] = true
-      --       end
-      --       vim.api.nvim_set_hl(0, key, option)
-      --     end
-      --     return higlights
-      --   end,
-      -- }
+      require('catppuccin').setup {
+        transparent_background = true,
+      }
+      require('catppuccin').setup {
+        custom_highlights = function(colors)
+          local higlights = {
+            CursorLineNR = { fg = '#f2cdcd' },
+            -- MiniStatuslineDevinfo = { fg = colors.subtext1, bg = colors.surface1 },
+            -- MiniStatuslineFileinfo = { fg = colors.subtext1, bg = colors.surface1 },
+            -- MiniStatuslineFilename = { fg = colors.text, bg = colors.mantle },
+            -- MiniStatuslineInactive = { fg = colors.blue, bg = colors.mantle },
+            -- MiniStatuslineModeCommand = { fg = colors.base, bg = colors.peach, style = { 'bold' } },
+            -- MiniStatuslineModeInsert = { fg = colors.base, bg = colors.green, style = { 'bold' } },
+            -- MiniStatuslineModeNormal = { fg = colors.mantle, bg = colors.blue, style = { 'bold' } },
+            -- MiniStatuslineModeOther = { fg = colors.base, bg = colors.teal, style = { 'bold' } },
+            -- MiniStatuslineModeReplace = { fg = colors.base, bg = colors.red, style = { 'bold' } },
+            -- MiniStatuslineModeVisual = { fg = colors.base, bg = colors.mauve, style = { 'bold' } },
+          }
+          for key, value in pairs(higlights) do
+            local option = {
+              fg = value.fg,
+              bg = value.bg,
+            }
+            for _, style in ipairs(value.style or {}) do
+              option[style] = true
+            end
+            vim.api.nvim_set_hl(0, key, option)
+          end
+          return higlights
+        end,
+      }
     end,
   },
 
